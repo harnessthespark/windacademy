@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 
 
-class CampaignsConfig(AppConfig):
+class MarketingConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "apps.campaigns"
-    verbose_name = "Campaigns"
+    name = "apps.marketing"
+    verbose_name = "Marketing"
