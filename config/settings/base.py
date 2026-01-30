@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     "apps.marketing",
     "apps.documents",
     "apps.dashboard",
+    "apps.pages",
+    "apps.hr",
 ]
 
 MIDDLEWARE = [

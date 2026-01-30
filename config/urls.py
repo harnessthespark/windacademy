@@ -19,6 +19,8 @@ urlpatterns = [
     path("api/v1/marketing/", include("apps.marketing.urls")),
     path("api/v1/documents/", include("apps.documents.urls")),
     path("api/v1/dashboard/", include("apps.dashboard.urls")),
+    path("api/v1/content/", include("apps.pages.urls")),
+    path("api/v1/hr/", include("apps.hr.urls")),
     path("api/v1/portal/", include("apps.clients.portal_urls")),
 ]
 

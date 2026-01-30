@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Job, Candidate, Placement
+from .models import Job, Candidate, Interview, Placement
 
 
 class JobListSerializer(serializers.ModelSerializer):
@@ -36,6 +36,32 @@ class CandidateDetailSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "created_at", "updated_at")
 
 
+class InterviewListSerializer(serializers.ModelSerializer):
+    candidate_name = serializers.SerializerMethodField()
+    job_title = serializers.CharField(source="job.title", read_only=True)
+    interviewer_name = serializers.CharField(
+        source="interviewer.get_full_name", read_only=True, default=""
+    )
+
+    class Meta:
+        model = Interview
+        fields = (
+            "id", "candidate", "candidate_name", "job", "job_title",
+            "interview_type", "status", "scheduled_at", "duration_minutes",
+            "interviewer", "interviewer_name", "rating", "created_at",
+        )
+
+    def get_candidate_name(self, obj):
+        return f"{obj.candidate.first_name} {obj.candidate.last_name}"
+
+
+class InterviewDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Interview
+        fields = "__all__"
+        read_only_fields = ("id", "created_at", "updated_at")
+
+
 class PlacementListSerializer(serializers.ModelSerializer):
     candidate_name = serializers.SerializerMethodField()
 
@@ -43,7 +69,8 @@ class PlacementListSerializer(serializers.ModelSerializer):
         model = Placement
         fields = (
             "id", "job", "candidate", "candidate_name",
-            "status", "start_date", "fee_amount", "created_at",
+            "status", "start_date", "day_rate", "client_fee_percentage",
+            "resourcer_commission", "fee_amount", "created_at",
         )
 
     def get_candidate_name(self, obj):

@@ -8,7 +8,7 @@ from .models import (
 class LessonInline(admin.TabularInline):
     model = Lesson
     extra = 0
-    fields = ("order", "title", "lesson_type", "duration_minutes")
+    fields = ("order", "title", "lesson_type", "delivery_method", "duration_minutes")
     ordering = ("order",)
 
 
@@ -54,8 +54,8 @@ class ModuleAdmin(admin.ModelAdmin):
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ("module", "order", "title", "lesson_type", "duration_minutes")
-    list_filter = ("lesson_type", "module__course")
+    list_display = ("module", "order", "title", "lesson_type", "delivery_method", "duration_minutes")
+    list_filter = ("lesson_type", "delivery_method", "module__course")
     search_fields = ("title", "description")
     raw_id_fields = ("module",)
 

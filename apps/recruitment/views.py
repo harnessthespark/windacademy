@@ -3,10 +3,11 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 
 from apps.accounts.permissions import IsStaffUser
-from .models import Job, Candidate, Placement
+from .models import Job, Candidate, Interview, Placement
 from .serializers import (
     JobListSerializer, JobDetailSerializer,
     CandidateListSerializer, CandidateDetailSerializer,
+    InterviewListSerializer, InterviewDetailSerializer,
     PlacementListSerializer, PlacementDetailSerializer,
 )
 
@@ -39,13 +40,32 @@ class CandidateViewSet(viewsets.ModelViewSet):
         return CandidateDetailSerializer
 
 
+class InterviewViewSet(viewsets.ModelViewSet):
+    queryset = Interview.objects.select_related(
+        "candidate", "job", "interviewer"
+    ).all()
+    permission_classes = [IsStaffUser]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ["candidate", "job", "status", "interview_type", "interviewer"]
+    search_fields = [
+        "candidate__first_name", "candidate__last_name",
+        "job__title", "location", "feedback",
+    ]
+    ordering_fields = ["scheduled_at", "status", "rating", "created_at"]
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return InterviewListSerializer
+        return InterviewDetailSerializer
+
+
 class PlacementViewSet(viewsets.ModelViewSet):
     queryset = Placement.objects.select_related("job", "candidate").all()
     permission_classes = [IsStaffUser]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ["job", "status"]
     search_fields = ["candidate__first_name", "candidate__last_name"]
-    ordering_fields = ["created_at", "start_date", "fee_amount"]
+    ordering_fields = ["created_at", "start_date", "fee_amount", "day_rate"]
 
     def get_serializer_class(self):
         if self.action == "list":

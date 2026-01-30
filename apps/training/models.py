@@ -123,6 +123,14 @@ class Lesson(CRMBaseModel):
         DISCUSSION = "discussion", "Discussion"
         ACTIVITY = "activity", "Activity"
 
+    class DeliveryMethod(models.TextChoices):
+        FACE_TO_FACE = "face_to_face", "Face to Face"
+        VIDEO = "video", "Video"
+        VR = "vr", "VR"
+        ELEARNING = "elearning", "E-Learning"
+        WEBINAR = "webinar", "Webinar"
+        BLENDED = "blended", "Blended"
+
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name="lessons")
     order = models.PositiveIntegerField(default=0)
     title = models.CharField(max_length=255)
@@ -130,6 +138,9 @@ class Lesson(CRMBaseModel):
     duration_minutes = models.PositiveIntegerField(default=30)
     lesson_type = models.CharField(
         max_length=20, choices=LessonType.choices, default=LessonType.THEORY
+    )
+    delivery_method = models.CharField(
+        max_length=20, choices=DeliveryMethod.choices, default=DeliveryMethod.FACE_TO_FACE
     )
     materials = models.FileField(upload_to="training/lesson_materials/", blank=True)
 

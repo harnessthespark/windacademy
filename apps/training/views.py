@@ -81,7 +81,7 @@ class LessonViewSet(viewsets.ModelViewSet):
     queryset = Lesson.objects.select_related("module", "module__course").all()
     permission_classes = [IsStaffUser]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ["module", "module__course", "lesson_type"]
+    filterset_fields = ["module", "module__course", "lesson_type", "delivery_method"]
     search_fields = ["title", "description"]
     ordering_fields = ["order", "title", "duration_minutes"]
 
